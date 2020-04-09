@@ -1,4 +1,3 @@
-<script> 
     var pagePath = document.location.pathname  
     var pageHostname = document.location.hostname
     function flEvent(event, data, sendToDl) {
@@ -247,4 +246,3 @@ if (!pageType) {
       default:
         console.log('pageType is likely a thank you page or other non-sales related page')
   }
-  </script>
