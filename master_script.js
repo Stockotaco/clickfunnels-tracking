@@ -67,7 +67,7 @@
                 var bumpPrice = $('.product-price').eq(1).text().split('').filter(letter => {return letter.match(/[0-9\.]/i);}).join('');
                 var totalOrderValue = parseFloat(mainPrice || 0) + parseFloat(bumpPrice || 0);
                 var visitorName = arrFormNameFieldValues.toString().replace(/,/g," ")
-                var visitorEmail = $('[name="contact[email]"]').val();
+                var visitorEmail = $('[name*="email"]').val();
                 console.log('Purchase was made'); 
                 //If Bump Was Taken Trigger actions
                     if ($('.product-name').length !==1) {
@@ -102,7 +102,7 @@
             });
             break;
       case 'multi-step':
-        console.log('Is a multi step form')
+        console.log('Is a multi-step form')
         jQuery(function($){      
             $('[href="#submit-form-2step"]').on('click', function() { 
              formValValidation = []
@@ -129,8 +129,17 @@
              } else {
                 console.log('okay to trigger event.')
                 arrNameFieldValues = []
-               var visitorName = $('[name="contact[name]"]').val()
-               var visitorEmail = $('[name="contact[email]"]').val();
+                arrFormNameFieldValues =[]
+                $('[name*="name"]:visible').each(function () {
+                let formNameFieldName = $(this).attr('name')
+                let formNameFieldValue = $(this).val()
+                //console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
+                if (formNameFieldValue) {
+                window.arrFormNameFieldValues.push(formNameFieldValue)
+                }
+                })
+                var visitorName = arrFormNameFieldValues.toString().replace(/,/g," ")
+                var visitorEmail = $('[name*="email"]').val();
                flEvent("form-submit", {
                    name: visitorName,
                    email: visitorEmail,
@@ -285,7 +294,7 @@
               }
               })
               var visitorName = arrFormNameFieldValues.toString().replace(/,/g," ")
-              var visitorEmail = $('[name="contact[email]"]').val();
+              var visitorEmail = $('[name*="email"]').val();
                 flEvent("form-submit",{
                     name: visitorName,
                     email: visitorEmail,
