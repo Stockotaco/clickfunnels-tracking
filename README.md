@@ -1,14 +1,17 @@
 # clickfunnels-tracking
-Scripts to track clickfunnels
+Scripts to track Click Funnels pages in Funnelytics
 
 Every page needs to have a pageType declared. 
 Optin pages need to have a formTitle declared as well.
-Page Types:
-let pageType = "single-step"
-let pageType = "multi-step"
-let pageType = "optin"
-let pageType = "addonProduct-single"
-let pageType = "addonProduct-multiple"
+Declare the page types:
+<code>let pageType = "single-step"</code>
+<code>let pageType = "multi-step"</code>
+<code>let pageType = "optin"</code>
+<code>let pageType = "addon"</code>
+<code>let pageType = "addon-multiple"</code>
+
+Declare the optin form title:
+<code>let formTitle = "YOUR FORM TITLE"</code>
 
 single-step represents an order form page where the user inputs all the required fields in a single form.
     The way to define these in a Funnelytics advanced action is by specifying purchasBump as either true or false.
@@ -17,16 +20,16 @@ multi-step represents an order form page where the user inputs their contact det
     billing details on a different form. Both forms are on the same page though.
     In Funnelytics you can have 1 action that represent the optin on the first step, 
         and another action that represents the purchase of the main product with/without the bump.
-    The way to define these in a Funnelytics advanced action is by specifying the productId.
+
 
 optin represents a page where the user submits a form but no payment or checkout information is taken. 
     The way to define these in a Funnelytics advanced action is by adding the formTitle that you declared earlier.
 
-addonProduct-single represents a page that is either an upsell or downsell and only 1 product can be purchased. 
+addon represents a page that is either an upsell or downsell and only 1 product can be purchased. 
     There can be 2 different products on the page but they cannot be purchased simultaneously. It's either one or the other. 
-    The way to define these in a Funnelytics advanced action is by specifying the productId.
 
-addonProduct-multiple represents a page that is either an upsell or downsell and multiple products can be purchased simultaneously.
+
+addonProduct-multiple represents a page that is either an upsell or downsell and multiple products can be purchased simultaneously. This is not common.
     The way to define these in a Funnelytics advanced action is by specifying the productId.
 
 By Default, Funnelytics events using the flEvent function (which are being used in this script) will also be sent to the Google Tag Manager dataLayer.

@@ -51,12 +51,22 @@
         console.log('Is a single step form')
         $(function() {   
             $('#cfAR').on('submit', function() {
+              //check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
+              arrFormNameFieldValues =[]
+              $('[name*="name"]:visible').each(function () {
+              let formNameFieldName = $(this).attr('name')
+              let formNameFieldValue = $(this).val()
+              //console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
+              if (formNameFieldValue) {
+              window.arrFormNameFieldValues.push(formNameFieldValue)
+              }
+              })
                 var mainName = $('.product-name').eq(0).text();
                 var bumpName = $('.product-name').eq(1).text();
                 var mainPrice = $('.product-price').eq(0).text().split('').filter(letter => {return letter.match(/[0-9\.]/i);}).join('');
                 var bumpPrice = $('.product-price').eq(1).text().split('').filter(letter => {return letter.match(/[0-9\.]/i);}).join('');
                 var totalOrderValue = parseFloat(mainPrice || 0) + parseFloat(bumpPrice || 0);
-                var visitorName = $('[name="contact[name]"]').val();
+                var visitorName = arrFormNameFieldValues.toString().replace(/,/g," ")
                 var visitorEmail = $('[name="contact[email]"]').val();
                 console.log('Purchase was made'); 
                 //If Bump Was Taken Trigger actions
@@ -264,7 +274,17 @@
                console.log('do not trigger event.')
             } else {
                console.log('okay to trigger event.')
-              var visitorName = $('[name="contact[name]"]').val();
+               //check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
+              arrFormNameFieldValues =[]
+              $('[name*="name"]:visible').each(function () {
+              let formNameFieldName = $(this).attr('name')
+              let formNameFieldValue = $(this).val()
+              //console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
+              if (formNameFieldValue) {
+              window.arrFormNameFieldValues.push(formNameFieldValue)
+              }
+              })
+              var visitorName = arrFormNameFieldValues.toString().replace(/,/g," ")
               var visitorEmail = $('[name="contact[email]"]').val();
                 flEvent("form-submit",{
                     name: visitorName,
