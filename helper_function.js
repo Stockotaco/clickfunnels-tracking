@@ -5,10 +5,10 @@ function flEvent(event, data, sendToDl) {
         let dlEvent = function() {
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
-                'event': event,
+                'event': `fl-${event}`,
                 eventData,
             })
-            console.log(`${event} dataLayer event sent`)
+            console.log(`fl-${event} dataLayer event sent`)
         }
         if (!sendToDl) { // if the third function argument is falsy (empty), trigger the dataLayer event by default
             dlEvent()

@@ -7,10 +7,10 @@
           let dlEvent = function() {
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
-                  'event': event,
+                  'event': `fl-${event}`,
                   eventData,
               })
-              console.log(`${event} dataLayer event sent`)
+              console.log(`fl-${event} dataLayer event sent`)
           }
           if (!sendToDl) { // if the third function argument is falsy (empty), trigger the dataLayer event by default
               dlEvent()
@@ -40,7 +40,7 @@
               }, 200);
             }
           } else {
-      console.log(`flEvent dataType should be an object. Instead it's a(n) ${typeof(data)}`)
+      console.log(`flEvent dataType is expecting an object. Instead it's a(n) ${typeof(data)}`)
   }
   }
   if (typeof pageType === "undefined") {
@@ -172,7 +172,7 @@
              })   
          });
         break;
-      case 'addon-single':
+      case 'addon':
         console.log('Is an upsell or downsell - single purchase only')
         jQuery(function($){
             $('a[href*="#yes"]').on('click',function() {
