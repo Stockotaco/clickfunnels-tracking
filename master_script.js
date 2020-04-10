@@ -44,7 +44,7 @@
   }
   }
   if (typeof pageType === "undefined") {
-    console.error('You need to declare a pageType in the page settings to track Funnelytics')
+    console.error('You need to declare a pageType in the page settings to track Funnelytics on Click Funnels pages.')
 }
   switch (pageType) {
       case 'single-step':
@@ -305,5 +305,5 @@
           })
         break;
       default:
-        console.log(`pageType ${pageType}is not recognized.`)
+        console.log(`pageType "${pageType}" is not recognized.`)
   }
