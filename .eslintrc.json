@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "extends": ["airbnb", "prettier"],
+    "plugins": ["prettier"],
+    "rules": {
+        "no-unused-vars": "warn",
+        "no-console": "off",
+        "prettier/prettier": "error",
+        "func-names": "off",
+        "no-undef": "off",
+        "no-useless-escape": "off",
+        "no-plusplus": "off"
+    }
+}

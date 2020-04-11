@@ -10,7 +10,9 @@ Each project has it's own script in "Project Settings"
 
 The script will look like this: 
 
-```<script type="text/javascript"> (function(funnel) { var insert = document.getElementsByTagName('script')[0], script = document.createElement('script'); script.addEventListener('load', function() { window.funnelytics.init(funnel, false); }); script.src = 'https://cdn.funnelytics.io/track.js'; script.type = 'text/javascript'; script.async = true; insert.parentNode.insertBefore(script, insert); })('YOUR PROJECT ID'); </script>```
+```
+<script type="text/javascript"> (function(funnel) { var insert = document.getElementsByTagName('script')[0], script = document.createElement('script'); script.addEventListener('load', function() { window.funnelytics.init(funnel, false); }); script.src = 'https://cdn.funnelytics.io/track.js'; script.type = 'text/javascript'; script.async = true; insert.parentNode.insertBefore(script, insert); })('YOUR PROJECT ID'); </script>
+```
 
 Just be sure to replace `YOUR PROJECT ID` with your actual project ID.
 
@@ -24,7 +26,9 @@ In addition to the base script, add the contents of the master_script.js to the 
 
 You can use this script to call the repository with a CDN jsDelivr. 
 
-```<script src="https://cdn.jsdelivr.net/gh/Stockotaco/clickfunnels-tracking@v1.0.0/master_script.min.js"></script>```
+```
+<script src="https://cdn.jsdelivr.net/gh/Stockotaco/clickfunnels-tracking@v1.0.0/master_script.min.js"></script>
+```
 
 ### Declare a `pageType` on each step of the funnel in the `head`
 
@@ -92,7 +96,7 @@ let formTitle = "YOUR FORM TITLE"
 
 Here's an example of a funnel that has:
 
-1. A single-step order form
+1. A multi-step order form
 2. 2 one-time offer (OTO) pages
 3. 2 Downsell offers
 
@@ -100,4 +104,4 @@ Here's an example of a funnel that has:
 
 Refer to this document on how to configure each setting individually in Funnelytics:
 
-(https://docs.google.com/spreadsheets/d/1VKRQ3Af18hlml-urb84tFj8FewuERlQqzOtgutvyxBI/edit?usp=sharing)
+https://docs.google.com/spreadsheets/d/1VKRQ3Af18hlml-urb84tFj8FewuERlQqzOtgutvyxBI/edit?usp=sharing
