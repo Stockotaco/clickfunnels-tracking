@@ -1,5 +1,4 @@
 const pagePath = document.location.pathname.replace(/\/?(\?|#|$)/, '/$1');
-const pageHostname = document.location.hostname;
 
 function flEvent(event, data, sendToDl) {
   const eventData = data || {};
@@ -53,7 +52,7 @@ switch (pageType) {
         // check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
         arrFormNameFieldValues = [];
         $('[name*="name"]:visible').each(function () {
-          const formNameFieldName = $(this).attr('name');
+          // const formNameFieldName = $(this).attr('name');
           const formNameFieldValue = $(this).val();
           // console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
           if (formNameFieldValue) {
@@ -144,7 +143,7 @@ switch (pageType) {
             arrNameFieldValues = [];
             arrFormNameFieldValues = [];
             $('[name*="name"]:visible').each(function () {
-              const formNameFieldName = $(this).attr('name');
+              // const formNameFieldName = $(this).attr('name');
               const formNameFieldValue = $(this).val();
               // console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
               if (formNameFieldValue) {
@@ -335,7 +334,7 @@ switch (pageType) {
           // check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
           arrFormNameFieldValues = [];
           $('[name*="name"]:visible').each(function () {
-            const formNameFieldName = $(this).attr('name');
+            // const formNameFieldName = $(this).attr('name');
             const formNameFieldValue = $(this).val();
             // console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
             if (formNameFieldValue) {

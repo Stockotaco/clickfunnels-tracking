@@ -9,7 +9,9 @@
     "rules": {
         "no-unused-vars": "warn",
         "no-console": "off",
-        "prettier/prettier": "error",
+        "prettier/prettier": ["error", {
+            "endOfLine": "auto"
+        }],
         "func-names": "off",
         "no-undef": "off",
         "no-useless-escape": "off",
