@@ -87,3 +87,5 @@ function flIdentify(data, sendToDl) {
     console.log('user is already identified to Funnelytics');
   }
 }
+
+// Check and record purchases by productId

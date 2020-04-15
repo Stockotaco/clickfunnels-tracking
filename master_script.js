@@ -119,7 +119,7 @@ switch (pageType) {
             window.prodPropsPrice.push(prodPrice);
           }
         );
-        // get all the prices and add them together
+        // get all the prices from array and add them together
         const numOr0 = (n) => (isNaN(n) ? 0 : n);
         const totalPriceFull = window.prodPropsPrice.reduce(
           (a, b) => +numOr0(a) + +numOr0(b)
@@ -129,7 +129,7 @@ switch (pageType) {
         // trigger flEvent for each product and it's data
         for (let i = 0; i < prodProps.length; i++) {
           // console.log(prodProps[i]);
-          flEvent('test', prodProps[i]);
+          flEvent('purchase', prodProps[i]);
         }
         // check for all visible fields with the name selector 'name'. Store them in an array and then add them to a string.
         arrFormNameFieldValues = [];
@@ -211,6 +211,7 @@ switch (pageType) {
         });
       });
       $('#cfAR').on('submit', function () {
+        // step 2: trigger purchase events
         prodProps = [];
         prodPropsPrice = [];
         $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
@@ -242,7 +243,7 @@ switch (pageType) {
         // trigger flEvent for each product and it's data
         for (let i = 0; i < prodProps.length; i++) {
           // console.log(prodProps[i]);
-          flEvent('test', prodProps[i]);
+          flEvent('purchase', prodProps[i]);
         }
         // check for all visible fields with the name selector 'name'. Store them in an array and then add them to a string.
         arrFormNameFieldValues = [];
@@ -307,44 +308,53 @@ switch (pageType) {
   case 'addon-multiple':
     console.log('Is an upsell or downsell - 3 or more products');
     jQuery(function ($) {
-      $('a[href*="#yes"]').on('click', function () {
-        const prodAddonArr = $('[data-title*="bump-button"]:visible');
-        for (let i = 0; i < prodAddonArr.length; i++) {
-          if (prodAddonArr[i].innerText.trim().toLowerCase() === 'added') {
-            console.log(`${i + 1} Product(s) Added`);
-            const dataPurchase = $(this).attr('data-purchase');
-            const dataPurchaseDecoded = JSON.parse(dataPurchase);
-            console.log(dataPurchase);
-            const prodId = dataPurchaseDecoded.product_id;
-            console.log(prodId);
-            // Trigger Funnelytics Action For Purchase(s)
-            window.funnelytics.events.trigger(
-              'purchase',
-              {
-                pagePath,
-                addonNumber: i + 1,
-              },
-              function () {
-                // continue with process..
-              }
-            );
-          }
+      prodProps = [];
+      prodPropsPrice = [];
+      $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
+        function () {
+          // get the id, name, and price of all the checked products
+          const prodId = $(this).val();
+          const prodName = $(this).attr('data-product-name');
+          const prodPrice = $(this).attr('data-product-amount');
+          /* console.log(
+		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
+    ); */
+          // push the data to an empty array
+          window.prodProps.push({
+            prodId,
+            prodName,
+            prodPrice: parseFloat(prodPrice || 0),
+          });
+          // push just the prices to an empty array
+          window.prodPropsPrice.push(prodPrice);
         }
-      });
-      $('a[href*="#no"]').on('click', function () {
-        console.log('Addon Product was Rejected');
-        // Trigger Funnelytics Action For Not Purchasing
-        window.funnelytics.events.trigger(
-          'reject-click',
-          {
-            pagePath,
-            product: 'addon',
-          },
-          function () {
-            // continue with process..
-          }
-        );
-      });
+      );
+      // get all the prices and add them together
+      const numOr0 = (n) => (isNaN(n) ? 0 : n);
+      const totalPriceFull = window.prodPropsPrice.reduce(
+        (a, b) => +numOr0(a) + +numOr0(b)
+      );
+      const totalPrice = parseFloat(totalPriceFull);
+      // console.log(totalPrice);
+      // trigger flEvent for each product and it's data
+      for (let i = 0; i < prodProps.length; i++) {
+        // console.log(prodProps[i]);
+        flEvent('purchase', prodProps[i]);
+      }
+    });
+    $('a[href*="#no"]').on('click', function () {
+      console.log('Addon Product was Rejected');
+      // Trigger Funnelytics Action For Not Purchasing
+      window.funnelytics.events.trigger(
+        'reject-click',
+        {
+          pagePath,
+          product: 'addon',
+        },
+        function () {
+          // continue with process..
+        }
+      );
     });
     break;
   case 'optin':
