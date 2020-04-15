@@ -4,6 +4,7 @@ function flEvent(event, data, sendToDl) {
   const eventData = data || {};
   // console.log(`the dataType is ${typeof(data)}`)
   if (typeof data === 'object') {
+    // define the dlEvent
     const dlEvent = function () {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
@@ -31,7 +32,7 @@ function flEvent(event, data, sendToDl) {
         }
         window.funnelytics.events.trigger(event, eventData);
         window.clearInterval(checker);
-      }, 200);
+      }, 100);
     }
   } else {
     console.log(
@@ -39,6 +40,54 @@ function flEvent(event, data, sendToDl) {
     );
   }
 }
+function flIdentify(data, sendToDl) {
+  const eventData = data || {};
+  // check to see if Funnelytics has already identified the user or not
+  if (!localStorage.getItem('flIdentified')) {
+    // console.log(`the dataType is ${typeof(data)}`)
+    if (typeof data === 'object') {
+      // define the dlEvent
+      const dlEvent = function () {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: `fl-identify`,
+          eventData,
+        });
+        console.log(`fl-identify dataLayer event sent`);
+      };
+      if (!sendToDl) {
+        // if the third function argument is falsy (empty), trigger the dataLayer event by default
+        dlEvent();
+      }
+      try {
+        window.funnelytics.events.trigger('identify', eventData);
+        window.localStorage.setItem('flIdentified', 'true'); // set local storage identifying that an identify call has been sent
+      } catch (error) {
+        console.error(error);
+        const checker = window.setInterval(function () {
+          if (!window.funnelytics) {
+            console.log('searching for window.funnelytics');
+            return;
+          }
+          if (!window.funnelytics.step) {
+            console.log('searching for window.funnelytics.step');
+            return;
+          }
+          window.funnelytics.events.trigger('identify', eventData);
+          window.localStorage.setItem('flIdentified', 'true'); // set local storage identifying that an identify call has been sent
+          window.clearInterval(checker);
+        }, 100);
+      }
+    } else {
+      console.log(
+        `flEvent dataType is expecting an object. Instead it's a(n) ${typeof data}`
+      );
+    }
+  } else {
+    console.log('user is already identified to Funnelytics');
+  }
+}
+
 if (typeof pageType === 'undefined') {
   console.error(
     'You need to declare a pageType in the page settings to track Funnelytics on Click Funnels pages.'
@@ -49,7 +98,40 @@ switch (pageType) {
     console.log('Is a single step form');
     $(function () {
       $('#cfAR').on('submit', function () {
-        // check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
+        prodProps = [];
+        prodPropsPrice = [];
+        $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
+          function () {
+            // get the id, name, and price of all the checked products
+            const prodId = $(this).val();
+            const prodName = $(this).attr('data-product-name');
+            const prodPrice = $(this).attr('data-product-amount');
+            /* console.log(
+		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
+    ); */
+            // push the data to an empty array
+            window.prodProps.push({
+              prodId,
+              prodName,
+              prodPrice: parseFloat(prodPrice || 0),
+            });
+            // push just the prices to an empty array
+            window.prodPropsPrice.push(prodPrice);
+          }
+        );
+        // get all the prices and add them together
+        const numOr0 = (n) => (isNaN(n) ? 0 : n);
+        const totalPriceFull = window.prodPropsPrice.reduce(
+          (a, b) => +numOr0(a) + +numOr0(b)
+        );
+        const totalPrice = parseFloat(totalPriceFull);
+        // console.log(totalPrice);
+        // trigger flEvent for each product and it's data
+        for (let i = 0; i < prodProps.length; i++) {
+          // console.log(prodProps[i]);
+          flEvent('test', prodProps[i]);
+        }
+        // check for all visible fields with the name selector 'name'. Store them in an array and then add them to a string.
         arrFormNameFieldValues = [];
         $('[name*="name"]:visible').each(function () {
           // const formNameFieldName = $(this).attr('name');
@@ -59,59 +141,14 @@ switch (pageType) {
             window.arrFormNameFieldValues.push(formNameFieldValue);
           }
         });
-        const mainName = $('.product-name').eq(0).text();
-        const bumpName = $('.product-name').eq(1).text();
-        const mainPrice = $('.product-price')
-          .eq(0)
-          .text()
-          .split('')
-          .filter((letter) => {
-            return letter.match(/[0-9\.]/i);
-          })
-          .join('');
-        const bumpPrice = $('.product-price')
-          .eq(1)
-          .text()
-          .split('')
-          .filter((letter) => {
-            return letter.match(/[0-9\.]/i);
-          })
-          .join('');
-        const totalOrderValue =
-          parseFloat(mainPrice || 0) + parseFloat(bumpPrice || 0);
         const visitorName = arrFormNameFieldValues
           .toString()
           .replace(/,/g, ' ');
         const visitorEmail = $('[name*="email"]').val();
-        console.log('Purchase was made');
-        // If Bump Was Taken Trigger actions
-        if ($('.product-name').length !== 1) {
-          // Trigger Funnelytics Actions for Main and Bump
-          // main product
-          flEvent('purchase', {
-            mainProductName: mainName,
-            mainProductPrice: mainPrice,
-            name: visitorName,
-            email: visitorEmail,
-            orderTotal: totalOrderValue,
-            purchaseBump: 'true',
-          });
-          // bump product
-          flEvent('purchase', {
-            bumpProductName: bumpName,
-            bumpProductPrice: bumpPrice,
-          });
-        } else {
-          // If bump was not taken, trigger Funnelytics Action for Main Only
-          flEvent('purchase', {
-            mainProductName: mainName,
-            mainProductPrice: mainPrice,
-            name: visitorName,
-            email: visitorEmail,
-            orderTotal: totalOrderValue,
-            purchaseBump: 'false',
-          });
-        }
+        flIdentify({
+          name: visitorName,
+          email: visitorEmail,
+        });
       });
     });
     break;
@@ -119,6 +156,11 @@ switch (pageType) {
     console.log('Is a multi-step form');
     jQuery(function ($) {
       $('[href="#submit-form-2step"]').on('click', function () {
+        // step 1: check for valid form submission on step 1 of the multi-step order form.
+        // check all required form fields to make sure that they have a name and a value.
+        // Push true into an array if the field has a name and a value.
+        // Push na if the element doesn't have a name.
+        // Push False if the element has a name but no value.
         formValValidation = [];
         $('.required1').each(function () {
           const visitorInfo = $(this).val();
@@ -127,7 +169,7 @@ switch (pageType) {
             // console.log(formFieldName + ' has a value')
             window.formValValidation.push('true');
           } else if (formFieldName === undefined) {
-            // console.log(formFieldName + ' has an element name that is not defined and wont count against validation')
+            // console.log(formFieldName + ' has an element name that is not defined and won't count against validation')
             window.formValValidation.push('na');
           } else {
             // console.log(formFieldName + ' Does not have a value')
@@ -135,7 +177,10 @@ switch (pageType) {
           }
         });
         jQuery(function () {
+          // check the array for the value false. If there is a false, that means there is a required field that has a name but now value.
+          // therefore the form is not valid to be submitted.
           const validFormArray = $.inArray('false', formValValidation);
+          // will return -1 if the array contains "false".
           if (validFormArray !== -1) {
             console.log('do not trigger event.');
           } else {
@@ -155,77 +200,68 @@ switch (pageType) {
               .replace(/,/g, ' ');
             const visitorEmail = $('[name*="email"]').val();
             flEvent('form-submit', {
-              name: visitorName,
-              email: visitorEmail,
               formPath: pagePath,
               formStep: 1,
+            });
+            flIdentify({
+              name: visitorName,
+              email: visitorEmail,
             });
           }
         });
       });
       $('#cfAR').on('submit', function () {
-        const mainName = $('.product-name').eq(0).text();
-        const bumpName = $('.product-name').eq(1).text();
-        const mainPrice = $('.product-price')
-          .eq(0)
-          .text()
-          .split('')
-          .filter((letter) => {
-            return letter.match(/[0-9\.]/i);
-          })
-          .join('');
-        const bumpPrice = $('.product-price')
-          .eq(1)
-          .text()
-          .split('')
-          .filter((letter) => {
-            return letter.match(/[0-9\.]/i);
-          })
-          .join('');
-        const totalOrderValue =
-          parseFloat(mainPrice || 0) + parseFloat(bumpPrice || 0);
-        console.log('Purchase Was Made');
-        // If Bump Was Taken Save Variables and Trigger actions
-        if ($('.product-name').length !== 1) {
-          // Trigger Funnelytics Actions for Main and Bump
-          console.log('Main + Bump Products Were Purchased');
-          // main product
-          flEvent(
-            'purchase', {
-              mainProductName: mainName,
-              mainProductPrice: mainPrice,
-              orderTotal: totalOrderValue,
-              purchaseBump: 'true',
-            },
-            function () {
-              // continue with process..
-            }
-          );
-          // bump product
-          flEvent(
-            'purchase', {
-              bumpProductName: bumpName,
-              bumpProductPrice: bumpPrice,
-            },
-            function () {
-              // continue with process..
-            }
-          );
-        } else {
-          // Trigger Funnelytics Action for Main Only
-          console.log('Main Product Only Was Purchased');
-          flEvent(
-            'purchase', {
-              mainProductName: mainName,
-              mainProductPrice: mainPrice,
-              orderTotal: totalOrderValue,
-              purchaseBump: 'false',
-            },
-            function () {
-              // continue with process..
-            }
-          );
+        prodProps = [];
+        prodPropsPrice = [];
+        $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
+          function () {
+            // get the id, name, and price of all the checked products
+            const prodId = $(this).val();
+            const prodName = $(this).attr('data-product-name');
+            const prodPrice = $(this).attr('data-product-amount');
+            /* console.log(
+		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
+    ); */
+            // push the data to an empty array
+            window.prodProps.push({
+              prodId,
+              prodName,
+              prodPrice: parseFloat(prodPrice || 0),
+            });
+            // push just the prices to an empty array
+            window.prodPropsPrice.push(prodPrice);
+          }
+        );
+        // get all the prices and add them together
+        const numOr0 = (n) => (isNaN(n) ? 0 : n);
+        const totalPriceFull = window.prodPropsPrice.reduce(
+          (a, b) => +numOr0(a) + +numOr0(b)
+        );
+        const totalPrice = parseFloat(totalPriceFull);
+        // console.log(totalPrice);
+        // trigger flEvent for each product and it's data
+        for (let i = 0; i < prodProps.length; i++) {
+          // console.log(prodProps[i]);
+          flEvent('test', prodProps[i]);
         }
+        // check for all visible fields with the name selector 'name'. Store them in an array and then add them to a string.
+        arrFormNameFieldValues = [];
+        $('[name*="name"]:visible').each(function () {
+          // const formNameFieldName = $(this).attr('name');
+          const formNameFieldValue = $(this).val();
+          // console.log(`${formNameFieldName} has a value of ${formNameFieldValue}`)
+          if (formNameFieldValue) {
+            window.arrFormNameFieldValues.push(formNameFieldValue);
+          }
+        });
+        const visitorName = arrFormNameFieldValues
+          .toString()
+          .replace(/,/g, ' ');
+        const visitorEmail = $('[name*="email"]').val();
+        flIdentify({
+          name: visitorName,
+          email: visitorEmail,
+        });
       });
     });
     break;
@@ -240,7 +276,8 @@ switch (pageType) {
         console.log(productId);
         // Trigger Funnelytics Action For Purchase
         flEvent(
-          'purchase', {
+          'purchase',
+          {
             productId,
             product: 'addon',
             pagePath,
@@ -255,7 +292,8 @@ switch (pageType) {
         // get productId from href
         // Trigger Funnelytics Action For Not Purchasing
         flEvent(
-          'reject-click', {
+          'reject-click',
+          {
             pagePath,
             product: 'addon',
           },
@@ -281,7 +319,8 @@ switch (pageType) {
             console.log(prodId);
             // Trigger Funnelytics Action For Purchase(s)
             window.funnelytics.events.trigger(
-              'purchase', {
+              'purchase',
+              {
                 pagePath,
                 addonNumber: i + 1,
               },
@@ -296,7 +335,8 @@ switch (pageType) {
         console.log('Addon Product was Rejected');
         // Trigger Funnelytics Action For Not Purchasing
         window.funnelytics.events.trigger(
-          'reject-click', {
+          'reject-click',
+          {
             pagePath,
             product: 'addon',
           },
@@ -346,9 +386,12 @@ switch (pageType) {
             .replace(/,/g, ' ');
           const visitorEmail = $('[name*="email"]').val();
           flEvent('form-submit', {
+            pagePath,
+            formTitle,
+          });
+          flIdentify({
             name: visitorName,
             email: visitorEmail,
-            formTitle,
           });
         }
       });
