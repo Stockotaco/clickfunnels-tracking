@@ -100,6 +100,58 @@ switch (pageType) {
       $('#cfAR').on('submit', function () {
         prodProps = [];
         prodPropsPrice = [];
+        // Create a separate purchase event with an object of all the purchase options and true/false
+        arrCheckedProducts = [];
+        arrAllProducts = [];
+        arrProdTF = [];
+        // create an array of all the products that were checked.
+        const checkedProducts = $(
+          '#cfAR input[name="purchase[product_ids][]"]:checked'
+        ).each(function () {
+          // get the id of all the checked products
+          const prodId = $(this).val();
+          // console.log(prodId);
+          window.arrCheckedProducts.push(prodId);
+        });
+        // create an array of all the products on the page
+        const allProducts = $(
+          '#cfAR input[name="purchase[product_ids][]"]'
+        ).each(function () {
+          // get the id of all products
+          const prodId = $(this).val();
+          // console.log(prodId);
+          window.arrAllProducts.push(prodId);
+        });
+        // function to create a new array with the product ID as the key and true/false as the value
+        function createTfArray(a1, a2) {
+          const hash = {};
+          a1.forEach((int) => {
+            if (!hash[int]) {
+              hash[int] = {};
+            }
+            hash[int].has1 = true;
+          });
+          a2.forEach((int) => {
+            if (!hash[int]) {
+              hash[int] = {};
+            }
+            hash[int].has2 = true;
+          });
+          return Object.keys(hash).map((int) => {
+            const itemHash = {};
+            itemHash[int] = Boolean(hash[int].has1 && hash[int].has2);
+            window.arrProdTF.push(itemHash);
+            return itemHash;
+          });
+        }
+        createTfArray(arrCheckedProducts, arrAllProducts);
+
+        // make a single object from the array of objects
+        const arrObjProdTF = Object.assign({}, ...arrProdTF);
+        console.log(arrObjProdTF);
+
+        flEvent('products', arrObjProdTF);
+
         $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
           function () {
             // get the id, name, and price of all the checked products
@@ -184,7 +236,7 @@ switch (pageType) {
           if (validFormArray !== -1) {
             console.log('do not trigger event.');
           } else {
-            console.log('okay to trigger event.');
+            // console.log('okay to trigger event.');
             arrNameFieldValues = [];
             arrFormNameFieldValues = [];
             $('[name*="name"]:visible').each(function () {
@@ -212,6 +264,58 @@ switch (pageType) {
       });
       $('#cfAR').on('submit', function () {
         // step 2: trigger purchase events
+        // Create a separate purchase event with an object of all the purchase options and true/false
+        arrCheckedProducts = [];
+        arrAllProducts = [];
+        arrProdTF = [];
+        // create an array of all the products that were checked.
+        const checkedProducts = $(
+          '#cfAR input[name="purchase[product_ids][]"]:checked'
+        ).each(function () {
+          // get the id of all the checked products
+          const prodId = $(this).val();
+          // console.log(prodId);
+          window.arrCheckedProducts.push(prodId);
+        });
+        // create an array of all the products on the page
+        const allProducts = $(
+          '#cfAR input[name="purchase[product_ids][]"]'
+        ).each(function () {
+          // get the id of all products
+          const prodId = $(this).val();
+          // console.log(prodId);
+          window.arrAllProducts.push(prodId);
+        });
+        // function to create a new array with the product ID as the key and true/false as the value
+        function createTfArray(a1, a2) {
+          const hash = {};
+          a1.forEach((int) => {
+            if (!hash[int]) {
+              hash[int] = {};
+            }
+            hash[int].has1 = true;
+          });
+          a2.forEach((int) => {
+            if (!hash[int]) {
+              hash[int] = {};
+            }
+            hash[int].has2 = true;
+          });
+          return Object.keys(hash).map((int) => {
+            const itemHash = {};
+            itemHash[int] = Boolean(hash[int].has1 && hash[int].has2);
+            window.arrProdTF.push(itemHash);
+            return itemHash;
+          });
+        }
+        createTfArray(arrCheckedProducts, arrAllProducts);
+
+        // make a single object from the array of objects
+        const arrObjProdTF = Object.assign({}, ...arrProdTF);
+        console.log(arrObjProdTF);
+
+        flEvent('products', arrObjProdTF);
+
         prodProps = [];
         prodPropsPrice = [];
         $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
@@ -238,7 +342,7 @@ switch (pageType) {
         const totalPriceFull = window.prodPropsPrice.reduce(
           (a, b) => +numOr0(a) + +numOr0(b)
         );
-        const totalPrice = parseFloat(totalPriceFull);
+        // const totalPrice = parseFloat(totalPriceFull);
         // console.log(totalPrice);
         // trigger flEvent for each product and it's data
         for (let i = 0; i < prodProps.length; i++) {
@@ -316,6 +420,58 @@ switch (pageType) {
           const prodId = $(this).val();
           const prodName = $(this).attr('data-product-name');
           const prodPrice = $(this).attr('data-product-amount');
+          // Create a separate purchase event with an object of all the purchase options and true/false
+          arrCheckedProducts = [];
+          arrAllProducts = [];
+          arrProdTF = [];
+          // create an array of all the products that were checked.
+          const checkedProducts = $(
+            '#cfAR input[name="purchase[product_ids][]"]:checked'
+          ).each(function () {
+            // get the id of all the checked products
+            const prodId = $(this).val();
+            // console.log(prodId);
+            window.arrCheckedProducts.push(prodId);
+          });
+          // create an array of all the products on the page
+          const allProducts = $(
+            '#cfAR input[name="purchase[product_ids][]"]'
+          ).each(function () {
+            // get the id of all products
+            const prodId = $(this).val();
+            // console.log(prodId);
+            window.arrAllProducts.push(prodId);
+          });
+          // function to create a new array with the product ID as the key and true/false as the value
+          function createTfArray(a1, a2) {
+            const hash = {};
+            a1.forEach((int) => {
+              if (!hash[int]) {
+                hash[int] = {};
+              }
+              hash[int].has1 = true;
+            });
+            a2.forEach((int) => {
+              if (!hash[int]) {
+                hash[int] = {};
+              }
+              hash[int].has2 = true;
+            });
+            return Object.keys(hash).map((int) => {
+              const itemHash = {};
+              itemHash[int] = Boolean(hash[int].has1 && hash[int].has2);
+              window.arrProdTF.push(itemHash);
+              return itemHash;
+            });
+          }
+          createTfArray(arrCheckedProducts, arrAllProducts);
+
+          // make a single object from the array of objects
+          const arrObjProdTF = Object.assign({}, ...arrProdTF);
+          console.log(arrObjProdTF);
+
+          flEvent('products', arrObjProdTF);
+
           /* console.log(
 		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
     ); */
@@ -380,7 +536,7 @@ switch (pageType) {
         if (validFormArray !== -1) {
           console.log('do not trigger event.');
         } else {
-          console.log('okay to trigger event.');
+          // console.log('okay to trigger event.');
           // check for all fields with the name selector 'name'. Store them in an array and then add them to a string.
           arrFormNameFieldValues = [];
           $('[name*="name"]:visible').each(function () {

@@ -1,4 +1,5 @@
 # Click Funnels Tracking
+
 Scripts to track Click Funnels pages in Funnelytics
 
 ## Click Funnels Setup Instructions
@@ -8,7 +9,7 @@ Scripts to track Click Funnels pages in Funnelytics
 Each project has it's own script in "Project Settings"
 ![Where to Find the Funnelytics Base Script](https://p91.p3.n0.cdn.getcloudapp.com/items/8LujGov5/2020-04-10_12-41-49.png?v=844550786a70009f3b7d2000cc26269f)
 
-The script will look like this: 
+The script will look like this:
 
 ```
 <script type="text/javascript"> (function(funnel) { var insert = document.getElementsByTagName('script')[0], script = document.createElement('script'); script.addEventListener('load', function() { window.funnelytics.init(funnel, false); }); script.src = 'https://cdn.funnelytics.io/track.js'; script.type = 'text/javascript'; script.async = true; insert.parentNode.insertBefore(script, insert); })('YOUR PROJECT ID'); </script>
@@ -24,7 +25,7 @@ Each funnel has global settings that will be applied to every step in the funnel
 
 In addition to the base script, add the contents of the master_script.js to the body tracking code.
 
-You can use this script to call the repository with a CDN jsDelivr. 
+You can use this script to call the repository with a CDN jsDelivr.
 
 ```
 <script src="https://cdn.jsdelivr.net/gh/Stockotaco/clickfunnels-tracking@v1.0.0/master_script.min.js"></script>
@@ -34,7 +35,7 @@ You can use this script to call the repository with a CDN jsDelivr.
 
 ![Declare variables on each page individually](https://p91.p3.n0.cdn.getcloudapp.com/items/7Ku0BEwd/2020-04-10_12-59-40.png?v=fba0089a11047246fd8292c8c78d9d84)
 
-Every page needs to have a `pageType` declared. 
+Every page needs to have a `pageType` declared.
 
 Optin pages need to have a `formTitle` declared as well.
 
@@ -45,6 +46,7 @@ Declare the page type on each corresponding page:
 let pageType = "single-step"
 </script>
 ```
+
 ```
 <script>
 let pageType = "multi-step"
@@ -56,11 +58,13 @@ let pageType = "multi-step"
 let pageType = "addon"
 </script>
 ```
+
 ```
 <script>
 let pageType = "addon-multiple"
 </script>
 ```
+
 On an optin page, decalare the `pageType` and `formTitle`
 
 ```
@@ -71,24 +75,20 @@ let formTitle = "YOUR FORM TITLE"
 ```
 
 `single-step` represents an order form page where the user inputs all the required fields in a single form.
-    The way to define these in a Funnelytics advanced action is by specifying purchasBump as either true or false.
+  
+`multi-step` represents an order form page where the user inputs their contact details on one form but their
+billing details on a different form. Both forms are on the same page though.
+In Funnelytics you can have 1 action that represent the optin on the first step,
+and another action that represents the purchase of the main product with/without the bump.
 
-`multi-step` represents an order form page where the user inputs their contact details on one form but their 
-    billing details on a different form. Both forms are on the same page though.
-    In Funnelytics you can have 1 action that represent the optin on the first step, 
-        and another action that represents the purchase of the main product with/without the bump.
+`optin` represents a page where the user submits a form but no payment or checkout information is taken.
+The way to define these in a Funnelytics advanced action is by adding the formTitle that you declared earlier.
 
+`addon` represents a page that is either an upsell or downsell and only 1 product can be purchased.
+There can be 2 different products on the page but they cannot be purchased simultaneously. It's either one or the other.
 
-`optin` represents a page where the user submits a form but no payment or checkout information is taken. 
-    The way to define these in a Funnelytics advanced action is by adding the formTitle that you declared earlier.
-
-`addon` represents a page that is either an upsell or downsell and only 1 product can be purchased. 
-    There can be 2 different products on the page but they cannot be purchased simultaneously. It's either one or the other. 
-
-
-`addonProduct-multiple` represents a page that is either an upsell or downsell and multiple products can be purchased simultaneously. This is not common.
-    The way to define these in a Funnelytics advanced action is by specifying the productId.
-
+`addon-multiple` represents a page that is either an upsell or downsell and multiple products can be purchased simultaneously. This is not common.
+The way to define these in a Funnelytics advanced action is by specifying the productId.
 
 ## Funnelytics Setup Instructions
 
