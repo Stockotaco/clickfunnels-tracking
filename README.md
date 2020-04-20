@@ -75,7 +75,7 @@ let formTitle = "YOUR FORM TITLE"
 ```
 
 `single-step` represents an order form page where the user inputs all the required fields in a single form.
-  
+
 `multi-step` represents an order form page where the user inputs their contact details on one form but their
 billing details on a different form. Both forms are on the same page though.
 In Funnelytics you can have 1 action that represent the optin on the first step,
@@ -104,4 +104,4 @@ Here's an example of a funnel that has:
 
 Refer to this document on how to configure each setting individually in Funnelytics:
 
-https://docs.google.com/spreadsheets/d/1VKRQ3Af18hlml-urb84tFj8FewuERlQqzOtgutvyxBI/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/1VKRQ3Af18hlml-urb84tFj8FewuERlQqzOtgutvyxBI/copy?usp=sharing
