@@ -20,7 +20,7 @@ function flEvent(event, data, sendToDl) {
     try {
       window.funnelytics.events.trigger(event, eventData);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       const checker = window.setInterval(function () {
         if (!window.funnelytics) {
           console.log('searching for window.funnelytics');
@@ -383,7 +383,7 @@ switch (pageType) {
         flEvent(
           'purchase',
           {
-            prodId: productId
+            prodId: productId,
             product: 'addon',
             pagePath,
           },
