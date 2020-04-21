@@ -150,7 +150,7 @@ switch (pageType) {
         const arrObjProdTF = Object.assign({}, ...arrProdTF);
         console.log(arrObjProdTF);
 
-        flEvent('products', arrObjProdTF);
+        flEvent('purchase', arrObjProdTF);
 
         $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
           function () {
@@ -314,7 +314,7 @@ switch (pageType) {
         const arrObjProdTF = Object.assign({}, ...arrProdTF);
         console.log(arrObjProdTF);
 
-        flEvent('products', arrObjProdTF);
+        flEvent('purchase', arrObjProdTF);
 
         prodProps = [];
         prodPropsPrice = [];
