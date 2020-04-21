@@ -383,7 +383,7 @@ switch (pageType) {
         flEvent(
           'purchase',
           {
-            productId,
+            prodId: productId
             product: 'addon',
             pagePath,
           },
@@ -394,7 +394,6 @@ switch (pageType) {
       });
       $('a[href*="#no"]').on('click', function () {
         console.log('Addon Product was Rejected');
-        // get productId from href
         // Trigger Funnelytics Action For Not Purchasing
         flEvent(
           'reject-click',
@@ -470,7 +469,7 @@ switch (pageType) {
           const arrObjProdTF = Object.assign({}, ...arrProdTF);
           console.log(arrObjProdTF);
 
-          flEvent('products', arrObjProdTF);
+          flEvent('purchase', arrObjProdTF);
 
           /* console.log(
 		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
