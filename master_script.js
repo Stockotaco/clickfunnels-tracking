@@ -214,7 +214,7 @@ switch (pageType) {
         // Push na if the element doesn't have a name.
         // Push False if the element has a name but no value.
         formValValidation = [];
-        $('.required1').each(function () {
+        $('.required1:visible').each(function () {
           const visitorInfo = $(this).val();
           const formFieldName = $(this).attr('name');
           if (visitorInfo !== '' || undefined) {
@@ -516,7 +516,7 @@ switch (pageType) {
     console.log('Is an optin page');
     $('#cfAR').on('submit', function () {
       formValValidation = [];
-      $('.required1').each(function () {
+      $('.required1:visible').each(function () {
         const visitorInfo = $(this).val();
         const formFieldName = $(this).attr('name');
         if (visitorInfo !== '' || undefined) {
