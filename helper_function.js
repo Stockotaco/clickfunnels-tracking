@@ -63,7 +63,7 @@ function flIdentify(data, sendToDl) {
         window.funnelytics.events.trigger('identify', eventData);
         window.localStorage.setItem('flIdentified', 'true');
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         const checker = window.setInterval(function () {
           if (!window.funnelytics) {
             console.log('searching for window.funnelytics');

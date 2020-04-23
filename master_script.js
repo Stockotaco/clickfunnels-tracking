@@ -150,7 +150,7 @@ switch (pageType) {
         const arrObjProdTF = Object.assign({}, ...arrProdTF);
         console.log(arrObjProdTF);
 
-        flEvent('purchase', arrObjProdTF);
+        flEvent('purchase', arrObjProdTF, 1);
 
         $('#cfAR input[name="purchase[product_ids][]"]:checked').each(
           function () {
@@ -314,7 +314,7 @@ switch (pageType) {
         const arrObjProdTF = Object.assign({}, ...arrProdTF);
         console.log(arrObjProdTF);
 
-        flEvent('purchase', arrObjProdTF);
+        flEvent('purchase', arrObjProdTF, 1);
 
         prodProps = [];
         prodPropsPrice = [];
@@ -469,7 +469,7 @@ switch (pageType) {
           const arrObjProdTF = Object.assign({}, ...arrProdTF);
           console.log(arrObjProdTF);
 
-          flEvent('purchase', arrObjProdTF);
+          flEvent('purchase', arrObjProdTF, 1);
 
           /* console.log(
 		prodId + ' has a name of ' + prodName + ' and a price of ' + prodPrice
